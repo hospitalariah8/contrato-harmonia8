@@ -621,6 +621,16 @@ function processarCSV(texto) {
     mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim();
   });
 
+  // Diagnóstico — mostra mapa completo
+  const diag = document.getElementById('csv-diag');
+  if (diag) {
+    diag.style.display = 'block';
+    diag.innerHTML = '<strong>Mapa lido:</strong><br>' +
+      Object.keys(mapa).map(function(k) {
+        return '<code>[' + Array.from(k).map(function(c){ return c.charCodeAt(0); }).join(',') + '] ' + k + ' = ' + mapa[k] + '</code>';
+      }).join('<br>');
+  }
+
   function setVal(id, chave, tipo) {
     const el = document.getElementById(id);
     if (!el || mapa[chave] === undefined) return;
