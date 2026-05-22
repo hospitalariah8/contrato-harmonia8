@@ -4,30 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contrato de Locação — Loja Maçônica Harmonia Nº 8</title>
-  
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --gold: #99bbdd; --gold-light: #ddeeff; --gold-pale: #ddeeff;
-      --dark: #000080; --dark-mid: #000080; --text: #3a3628;
-      --text-muted: #7a7260; --border: #d8cfb8; --bg: #faf8f3;
-      --white: #ffffff; --success: #3d7a56;
+      --blue: #000080; --blue-light: #ddeeff; --blue-border: #99bbdd;
+      --text: #3a3628; --text-muted: #7a7260; --border: #d8cfb8;
+      --bg: #faf8f3; --white: #ffffff; --success: #3d7a56;
     }
     body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    .site-header { background: var(--dark); padding: 2rem 2rem 1.75rem; text-align: center; border-bottom: 2px solid var(--gold); }
-    .compass-symbol { font-family: Arial, sans-serif; font-size: 28px; color: #ffffff; letter-spacing: 6px; margin-bottom: 0.5rem; }
-    .site-header h1 { font-family: Arial, sans-serif; font-size: 26px; font-weight: 600; color: var(--white); letter-spacing: 0.04em; }
-    .site-header .subtitle { font-size: 12px; color: #ffffff; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 6px; }
+    .site-header { background: var(--blue); padding: 2rem 2rem 1.75rem; text-align: center; border-bottom: 2px solid var(--blue-border); }
+    .compass-symbol { font-size: 22px; color: #ffffff; letter-spacing: 6px; margin-bottom: 0.5rem; }
+    .site-header h1 { font-size: 24px; font-weight: 700; color: #ffffff; }
+    .site-header .subtitle { font-size: 12px; color: #cce0ff; letter-spacing: 0.1em; margin-top: 6px; }
     .main { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-    .form-intro { text-align: center; margin-bottom: 2rem; }
-    .form-intro p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+    /* Barra de importação CSV */
+    .import-bar { background: var(--white); border: 1px solid var(--blue-border); border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .import-bar-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .import-bar-text strong { color: var(--text); font-weight: 600; }
+    .btn-import { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-border); border-radius: 3px; padding: 8px 18px; font-family: Arial, sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 7px; white-space: nowrap; transition: background 0.2s; }
+    .btn-import:hover { background: var(--blue-border); }
+    .import-msg { display: none; align-items: center; gap: 7px; font-size: 13px; color: var(--success); background: #edf7f1; border: 1px solid #b6ddc8; border-radius: 3px; padding: 7px 14px; width: 100%; }
+    .import-msg.visible { display: flex; }
+
     .divider { display: flex; align-items: center; gap: 12px; margin: 0 auto 2rem; max-width: 300px; }
-    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--gold); opacity: 0.4; }
-    .divider-icon { color: #ffffff; font-size: 14px; letter-spacing: 4px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--blue-border); }
+    .divider-icon { color: var(--blue); font-size: 13px; letter-spacing: 3px; }
     .section { background: var(--white); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1.25rem; overflow: hidden; }
-    .section-header { background: var(--dark-mid); padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 10px; }
-    .section-header h2 { font-family: Arial, sans-serif; font-size: 16px; font-weight: 500; color: #ffffff; letter-spacing: 0.06em; }
-    .section-num { font-family: Arial, sans-serif; font-size: 13px; color: #ffffff; opacity: 0.7; min-width: 20px; }
+    .section-header { background: var(--blue); padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 10px; }
+    .section-header h2 { font-size: 14px; font-weight: 600; color: #ffffff; letter-spacing: 0.04em; }
+    .section-num { font-size: 13px; color: #cce0ff; min-width: 20px; }
     .section-body { padding: 1.5rem 1.25rem; }
     .field-row { display: grid; gap: 16px; margin-bottom: 16px; }
     .field-row:last-child { margin-bottom: 0; }
@@ -35,29 +41,29 @@
     .cols-2 { grid-template-columns: 1fr 1fr; }
     .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
     .field { display: flex; flex-direction: column; gap: 6px; }
-    label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+    label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); }
     input[type=text], input[type=email], input[type=date], input[type=time], input[type=number], select {
       font-family: Arial, sans-serif; font-size: 14px; color: var(--text); background: var(--bg);
       border: 1px solid var(--border); border-radius: 3px; padding: 9px 12px; width: 100%;
       outline: none; transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
     }
-    input:focus, select:focus { border-color: #ffffff; box-shadow: 0 0 0 3px rgba(181,147,58,0.12); }
+    input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,0,128,0.08); }
     select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237a7260' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; cursor: pointer; }
     .checkbox-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.25rem; }
     .checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); cursor: pointer; padding: 10px 12px; border: 1px solid var(--border); border-radius: 3px; background: var(--bg); transition: border-color 0.2s, background 0.2s; }
-    .checkbox-item:has(input:checked) { border-color: #ffffff; background: var(--gold-pale); }
-    .checkbox-item input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: #ffffff; flex-shrink: 0; }
-    .extras-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+    .checkbox-item:has(input:checked) { border-color: var(--blue); background: var(--blue-light); }
+    .checkbox-item input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--blue); flex-shrink: 0; }
+    .extras-label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
     .itens-extras { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
     .item-extra-row { display: flex; gap: 8px; align-items: center; }
     .item-extra-row input { flex: 1; }
     .btn-remove { background: none; border: 1px solid var(--border); border-radius: 3px; width: 34px; height: 34px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, color 0.2s; }
     .btn-remove:hover { border-color: #c0392b; color: #c0392b; }
     .btn-add { background: none; border: 1px dashed var(--border); border-radius: 3px; padding: 8px 14px; font-family: Arial, sans-serif; font-size: 13px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: border-color 0.2s, color 0.2s; }
-    .btn-add:hover { border-color: #ffffff; color: #ffffff; }
+    .btn-add:hover { border-color: var(--blue); color: var(--blue); }
     .form-footer { margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-    .btn-gerar { background: var(--dark); color: #ffffff; border: 1px solid var(--gold); border-radius: 3px; padding: 13px 36px; font-family: Arial, sans-serif; font-size: 18px; font-weight: 500; letter-spacing: 0.08em; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s, color 0.2s; }
-    .btn-gerar:hover { background: var(--gold); color: var(--dark); }
+    .btn-gerar { background: var(--blue); color: #ffffff; border: 1px solid var(--blue-border); border-radius: 3px; padding: 13px 36px; font-family: Arial, sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.06em; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s, opacity 0.2s; }
+    .btn-gerar:hover { opacity: 0.85; }
     .success-msg { display: none; align-items: center; gap: 8px; font-size: 13px; color: var(--success); background: #edf7f1; border: 1px solid #b6ddc8; border-radius: 3px; padding: 8px 16px; }
     .success-msg.visible { display: flex; }
     @media (max-width: 560px) { .cols-2, .cols-3 { grid-template-columns: 1fr; } .site-header h1 { font-size: 20px; } }
@@ -67,10 +73,26 @@
 <header class="site-header">
   <div class="compass-symbol">✦ ✦ ✦</div>
   <h1>Loja Maçônica Harmonia Nº 8</h1>
-  <p class="subtitle">Av. Pedro Miranda, 1130 — Pedreira, Belém – PA</p>
+  <p class="subtitle">AV. PEDRO MIRANDA, 1130 — PEDREIRA, BELÉM – PA</p>
 </header>
 <main class="main">
-  <div class="form-intro"><p>Preencha os campos abaixo para gerar automaticamente<br>o contrato de locação do salão em formato PDF.</p></div>
+
+  <!-- Barra de importação CSV -->
+  <div class="import-bar">
+    <div class="import-bar-text">
+      <strong>Importar respostas do Google Forms</strong><br>
+      Exporte a planilha do Google Sheets como <strong>.csv</strong> e importe aqui para preencher os campos automaticamente.
+    </div>
+    <button class="btn-import" type="button" onclick="importarCSV()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Importar CSV
+    </button>
+    <div class="import-msg" id="import-msg">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Dados importados com sucesso! Confira os campos antes de gerar.
+    </div>
+  </div>
+
   <div class="divider"><span class="divider-icon">◆</span></div>
 
   <div class="section">
@@ -515,6 +537,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var n,r,i,a,
 
 </script>
 <script>
+
 function adicionarItem() {
   const container = document.getElementById('itens-extras-container');
   const row = document.createElement('div');
@@ -529,12 +552,83 @@ function fData(d) {
   const [y,m,dd] = d.split('-'); return dd+'/'+m+'/'+y;
 }
 function fHora(h) { return h || '_____'; }
-function gv(id) { return document.getElementById(id).value.trim() || null; }
+function gv(id) { const el = document.getElementById(id); return el ? el.value.trim() || null : null; }
 
-function gerarPDF() {
+// Importar CSV do Google Sheets
+function importarCSV() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.csv';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => processarCSV(ev.target.result);
+    reader.readAsText(file, 'UTF-8');
+  };
+  input.click();
+}
+
+function processarCSV(texto) {
+  const linhas = texto.trim().split('\n');
+  if (linhas.length < 2) { alert('Arquivo CSV inválido ou sem respostas.'); return; }
+
+  // Cabeçalhos na primeira linha
+  const headers = linhas[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+  // Última resposta (última linha)
+  const ultima = linhas[linhas.length - 1];
+  const valores = parseCSVLine(ultima);
+
+  const mapa = {};
+  headers.forEach((h, i) => { mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim(); });
+
+  // Mapeamento flexível de colunas do Google Forms para os campos do painel
+  const set = (id, chaves) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    for (const chave of chaves) {
+      for (const k of Object.keys(mapa)) {
+        if (k.includes(chave)) { el.value = mapa[k]; return; }
+      }
+    }
+  };
+
+  set('nome',           ['nome', 'name', 'solicitante']);
+  set('cpf',            ['cpf']);
+  set('grau',           ['grau', 'degree']);
+  set('telefone',       ['telefone', 'tel', 'phone', 'celular', 'whatsapp']);
+  set('email',          ['email', 'e-mail']);
+  set('endereco',       ['endereço', 'endereco', 'address']);
+  set('data',           ['data do evento', 'data evento', 'date']);
+  set('finalidade',     ['finalidade', 'objetivo', 'motivo', 'evento']);
+  set('horario_inicio', ['início', 'inicio', 'start', 'hora de início']);
+  set('horario_fim',    ['término', 'termino', 'fim', 'end', 'hora de término']);
+  set('pessoas',        ['pessoas', 'convidados', 'participantes', 'número de pessoas']);
+  set('pagamento',      ['pagamento', 'payment', 'forma de pagamento']);
+  set('data_pagamento', ['data do pagamento', 'data pagamento']);
+
+  // Feedback visual
+  const msg = document.getElementById('import-msg');
+  msg.classList.add('visible');
+  setTimeout(() => msg.classList.remove('visible'), 4000);
+}
+
+function parseCSVLine(linha) {
+  const resultado = [];
+  let atual = '';
+  let dentro = false;
+  for (let i = 0; i < linha.length; i++) {
+    const c = linha[i];
+    if (c === '"') { dentro = !dentro; }
+    else if (c === ',' && !dentro) { resultado.push(atual); atual = ''; }
+    else { atual += c; }
+  }
+  resultado.push(atual);
+  return resultado;
+}
+
+async function gerarPDF() {
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-
   const nome      = gv('nome')      || '_______________________________________________';
   const cpf       = gv('cpf')       || '_______________________';
   const grau      = gv('grau')      || '___________';
@@ -552,21 +646,38 @@ function gerarPDF() {
   const eqCozinha = document.getElementById('eq_cozinha').checked;
   const extras    = Array.from(document.querySelectorAll('#itens-extras-container .item-extra-row input')).map(i=>i.value.trim()).filter(Boolean);
 
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const W = 210, ml = 20, mr = 20, cw = W - ml - mr;
   let y = 0;
 
-  function checkPage(needed) {
-    if (y + needed > 272) { doc.addPage(); y = 20; }
-  }
+  function checkPage(needed) { if (y + needed > 272) { doc.addPage(); y = 20; } }
 
-  function linha(bold, label, value, offsetY) {
+  function linha(label, value) {
     checkPage(7);
     doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
     doc.text(label, ml, y);
     const lw = doc.getTextWidth(label);
     doc.setFont('helvetica', 'normal');
     doc.text(value, ml + lw + 1, y);
-    y += offsetY || 7;
+    y += 7;
+  }
+
+  function bloco(texto) {
+    checkPage(10);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+    const lines = doc.splitTextToSize(texto, cw);
+    doc.text(lines, ml, y); y += lines.length * 6 + 4;
+  }
+
+  function wrapLinha(label, value) {
+    checkPage(7);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+    doc.text(label, ml, y);
+    const lw = doc.getTextWidth(label);
+    doc.setFont('helvetica', 'normal');
+    const lines = doc.splitTextToSize(value, cw - lw - 1);
+    doc.text(lines, ml + lw + 1, y);
+    y += lines.length * 6 + 2;
   }
 
   function secTitulo(num, titulo) {
@@ -578,16 +689,6 @@ function gerarPDF() {
     doc.text(num + '  ' + titulo, ml + 4, y + 5.5);
     doc.setTextColor(0, 0, 0);
     y += 13;
-  }
-
-  function wrapText(label, value, maxW) {
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
-    doc.text(label, ml, y);
-    const lw = doc.getTextWidth(label);
-    doc.setFont('helvetica', 'normal');
-    const lines = doc.splitTextToSize(value, maxW - lw - 1);
-    doc.text(lines, ml + lw + 1, y);
-    y += lines.length * 6 + 2;
   }
 
   // Cabeçalho
@@ -604,103 +705,73 @@ function gerarPDF() {
   doc.setFontSize(12); doc.setFont('helvetica', 'bold');
   doc.text('Autorização de Uso do Salão', W/2, 27, { align: 'center' });
   doc.setTextColor(0, 0, 0);
-
   y = 42;
 
-  // Introdução
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  const intro = 'Por meio deste instrumento, a Loja Maconica Harmonia No 8, doravante denominada simplesmente Loja, concede autorizacao de uso do seu salao ao(a) Solicitante identificado(a) abaixo, nas condicoes aqui descritas.';
-  const introLines = doc.splitTextToSize(intro, cw);
-  doc.text(introLines, ml, y);
-  y += introLines.length * 6 + 8;
+  bloco('Por meio deste instrumento, a Loja Maçônica Harmonia Nº 8, doravante denominada simplesmente Loja, concede autorização de uso do seu salão ao(à) solicitante identificado(a) abaixo, nas condições aqui descritas.');
+  y += 4;
 
-  // Seção 1
   secTitulo('I', 'Dados do Solicitante');
-  wrapText('Nome completo: ', nome, cw);
-  linha(true, 'CPF: ', cpf + '      Grau: ' + grau);
-  linha(true, 'Telefone: ', telefone + '      E-mail: ' + email);
-  wrapText('Endereço: ', endereco, cw);
+  wrapLinha('Nome completo: ', nome);
+  linha('CPF: ', cpf + '      Grau: ' + grau);
+  linha('Telefone: ', telefone + '      E-mail: ' + email);
+  wrapLinha('Endereço: ', endereco);
   y += 4;
 
-  // Seção 2
   secTitulo('II', 'Dados da Locação');
-  linha(true, 'Data do evento: ', data);
-  linha(true, 'Horário de início: ', hi + '      Horario de termino: ' + hf);
-  wrapText('Finalidade do evento: ', finalidade, cw);
-  linha(true, 'Número estimado de pessoas: ', String(pessoas));
+  linha('Data do evento: ', data);
+  linha('Horário de início: ', hi + '      Horário de término: ' + hf);
+  wrapLinha('Finalidade do evento: ', finalidade);
+  linha('Número estimado de pessoas: ', String(pessoas));
   y += 4;
 
-  // Seção 3
   secTitulo('III', 'Equipamentos e Estrutura Disponíveis');
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  doc.text('O salão será disponibilizado com os seguintes itens:', ml, y); y += 7;
-
+  bloco('O salão será disponibilizado com os seguintes itens:');
   const equip = [];
   if (eqMesas)   equip.push('Mesas e cadeiras (conforme disponibilidade da Loja);');
   if (eqCozinha) equip.push('Cozinha completa, incluindo fogão, pia e utensílios em geral (panelas, talheres, louças, etc.);');
   equip.push('Demais itens de infraestrutura básica do salão.');
-
-  equip.forEach((item, i) => {
+  equip.forEach((eq, i) => {
     checkPage(7);
-    const lines = doc.splitTextToSize((i+1) + '. ' + item, cw - 5);
-    doc.text(lines, ml + 4, y);
-    y += lines.length * 6 + 2;
+    const lines = doc.splitTextToSize((i+1) + '. ' + eq, cw - 5);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+    doc.text(lines, ml + 4, y); y += lines.length * 6 + 2;
   });
-
   if (extras.length > 0) {
     y += 2;
-    checkPage(8);
-    doc.setFont('helvetica', 'bold'); doc.text('Itens adicionais solicitados:', ml, y); y += 7;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+    checkPage(8); doc.text('Itens adicionais solicitados:', ml, y); y += 7;
     doc.setFont('helvetica', 'normal');
     extras.forEach(item => {
       checkPage(7);
       const lines = doc.splitTextToSize('( ) ' + item, cw - 5);
-      doc.text(lines, ml + 4, y);
-      y += lines.length * 6 + 2;
+      doc.text(lines, ml + 4, y); y += lines.length * 6 + 2;
     });
   }
   y += 4;
 
-  // Seção 4
   secTitulo('IV', 'Valor e Forma de Pagamento');
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  const valorTxt = 'O valor acordado para a utilização do salão é de R$ 1.000,00 (mil reais) por diária, a ser pago conforme combinado com a administração da Loja.';
-  const valorLines = doc.splitTextToSize(valorTxt, cw);
-  doc.text(valorLines, ml, y); y += valorLines.length * 6 + 4;
-  linha(true, 'Forma de pagamento: ', pagamento);
-  linha(true, 'Data do pagamento: ', dataPagto);
+  bloco('O valor acordado para a utilização do salão é de R$ 1.000,00 (mil reais) por diária, a ser pago conforme combinado com a administração da Loja.');
+  linha('Forma de pagamento: ', pagamento);
+  linha('Data do pagamento: ', dataPagto);
   y += 4;
 
-
-  // Seção 5 — Conservação e Reposição
   secTitulo('V', 'Conservação e Reposição em Caso de Dano');
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  const conservTxt1 = 'O(A) solicitante compromete-se a zelar pela boa conservação do salão e de todos os equipamentos e utensílios disponibilizados durante o período de uso.';
-  const conservLines1 = doc.splitTextToSize(conservTxt1, cw);
-  doc.text(conservLines1, ml, y); y += conservLines1.length * 6 + 4;
-  const conservTxt2 = 'Em caso de dano, extravio ou quebra de qualquer item pertencente à Loja, o(a) solicitante deverá comunicar imediatamente a administração e arcar com os custos de reparo ou reposição do bem, pelo valor de mercado vigente na data do ocorrido.';
-  const conservLines2 = doc.splitTextToSize(conservTxt2, cw);
-  doc.text(conservLines2, ml, y); y += conservLines2.length * 6 + 4;
-  const chavesTxt = 'O(A) solicitante ficará responsável pela coleta e devolução das chaves do salão junto ao Venerável Mestre da Loja, nos horários previamente acordados.';
-  const chavesLines = doc.splitTextToSize(chavesTxt, cw);
-  doc.text(chavesLines, ml, y); y += chavesLines.length * 6 + 8;
+  bloco('O(A) solicitante compromete-se a zelar pela boa conservação do salão e de todos os equipamentos e utensílios disponibilizados durante o período de uso.');
+  bloco('Em caso de dano, extravio ou quebra de qualquer item pertencente à Loja, o(a) solicitante deverá comunicar imediatamente a administração e arcar com os custos de reparo ou reposição do bem, pelo valor de mercado vigente na data do ocorrido.');
+  bloco('O(A) solicitante ficará responsável pela coleta e devolução das chaves do salão junto ao Venerável Mestre da Loja, nos horários previamente acordados.');
   y += 4;
 
-  // Seção 6
   secTitulo('VI', 'Considerações Finais');
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  const finalTxt = 'Este documento é celebrado com base na confiança e no espírito fraterno que une os membros desta Loja. Ambas as partes estão de acordo com os termos acima descritos e assinam o presente instrumento.';
-  const finalLines = doc.splitTextToSize(finalTxt, cw);
-  doc.text(finalLines, ml, y); y += finalLines.length * 6 + 16;
+  bloco('Este documento é celebrado com base na confiança e no espírito fraterno que une os membros desta Loja. Ambas as partes estão de acordo com os termos acima descritos e assinam o presente instrumento.');
+  y += 16;
 
-  // Assinaturas
   checkPage(30);
   doc.setDrawColor(100, 100, 100); doc.setLineWidth(0.3);
   doc.line(ml, y, ml + 70, y);
   doc.line(W - mr - 70, y, W - mr, y);
   y += 5;
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(90,90,90);
-  doc.text('Solicitante ', ml, y);
+  doc.text('Solicitante', ml, y);
   doc.text('Representante da Loja', W - mr - 70, y);
   y += 12;
   doc.setTextColor(0,0,0); doc.setFontSize(10);
@@ -709,13 +780,13 @@ function gerarPDF() {
   const nomeArq = gv('nome')
     ? 'Contrato_' + gv('nome').split(' ')[0] + '_' + (gv('data') || 'sem-data') + '.pdf'
     : 'Contrato_Salao_Harmonia8.pdf';
-
   doc.save(nomeArq);
 
   const msg = document.getElementById('success-msg');
   msg.classList.add('visible');
   setTimeout(() => msg.classList.remove('visible'), 4000);
 }
+
 </script>
 </body>
 </html>
