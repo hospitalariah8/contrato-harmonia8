@@ -93,7 +93,6 @@
     </div>
   </div>
 
-  <div id="csv-diag" style="display:none; background:#fffbe6; border:1px solid #f0c040; border-radius:4px; padding:1rem 1.25rem; margin-bottom:1rem; font-size:12px; line-height:1.8; word-break:break-all;"></div>
   <div class="divider"><span class="divider-icon">◆</span></div>
 
   <div class="section">
@@ -620,16 +619,14 @@ function processarCSV(texto) {
   headers.forEach(function(h, i) {
     mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim();
   });
+  Object.keys(mapa).forEach(function(k) {
+    console.log('CAMPO [' + Array.from(k).map(function(c){ return c.charCodeAt(0); }).join(',') + '] "' + k + '" = "' + mapa[k] + '"')
+  });
 
-  // Diagnóstico — mostra mapa completo
-  const diag = document.getElementById('csv-diag');
-  if (diag) {
-    diag.style.display = 'block';
-    diag.innerHTML = '<strong>Mapa lido:</strong><br>' +
-      Object.keys(mapa).map(function(k) {
-        return '<code>[' + Array.from(k).map(function(c){ return c.charCodeAt(0); }).join(',') + '] ' + k + ' = ' + mapa[k] + '</code>';
-      }).join('<br>');
-  }
+  // Log para diagnóstico
+  Object.keys(mapa).forEach(function(k) {
+    console.log('CAMPO: [' + Array.from(k).map(function(c){ return c.charCodeAt(0); }).join(',') + '] "' + k + '" = "' + mapa[k] + '"');
+  });
 
   function setVal(id, chave, tipo) {
     const el = document.getElementById(id);
