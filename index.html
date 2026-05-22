@@ -4,30 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contrato de Locação — Loja Maçônica Harmonia Nº 8</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --gold: #b5933a; --gold-light: #d4b06a; --gold-pale: #f5edd8;
-      --dark: #1a1710; --dark-mid: #2e2b22; --text: #3a3628;
+      --gold: #99bbdd; --gold-light: #ddeeff; --gold-pale: #ddeeff;
+      --dark: #000080; --dark-mid: #000080; --text: #3a3628;
       --text-muted: #7a7260; --border: #d8cfb8; --bg: #faf8f3;
       --white: #ffffff; --success: #3d7a56;
     }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
     .site-header { background: var(--dark); padding: 2rem 2rem 1.75rem; text-align: center; border-bottom: 2px solid var(--gold); }
-    .compass-symbol { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--gold); letter-spacing: 6px; margin-bottom: 0.5rem; }
-    .site-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--white); letter-spacing: 0.04em; }
-    .site-header .subtitle { font-size: 12px; color: var(--gold-light); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 6px; }
+    .compass-symbol { font-family: Arial, sans-serif; font-size: 28px; color: #ffffff; letter-spacing: 6px; margin-bottom: 0.5rem; }
+    .site-header h1 { font-family: Arial, sans-serif; font-size: 26px; font-weight: 600; color: var(--white); letter-spacing: 0.04em; }
+    .site-header .subtitle { font-size: 12px; color: #ffffff; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 6px; }
     .main { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
     .form-intro { text-align: center; margin-bottom: 2rem; }
     .form-intro p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
     .divider { display: flex; align-items: center; gap: 12px; margin: 0 auto 2rem; max-width: 300px; }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--gold); opacity: 0.4; }
-    .divider-icon { color: var(--gold); font-size: 14px; letter-spacing: 4px; }
+    .divider-icon { color: #ffffff; font-size: 14px; letter-spacing: 4px; }
     .section { background: var(--white); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1.25rem; overflow: hidden; }
     .section-header { background: var(--dark-mid); padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 10px; }
-    .section-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 500; color: var(--gold-light); letter-spacing: 0.06em; }
-    .section-num { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--gold); opacity: 0.7; min-width: 20px; }
+    .section-header h2 { font-family: Arial, sans-serif; font-size: 16px; font-weight: 500; color: #ffffff; letter-spacing: 0.06em; }
+    .section-num { font-family: Arial, sans-serif; font-size: 13px; color: #ffffff; opacity: 0.7; min-width: 20px; }
     .section-body { padding: 1.5rem 1.25rem; }
     .field-row { display: grid; gap: 16px; margin-bottom: 16px; }
     .field-row:last-child { margin-bottom: 0; }
@@ -37,26 +37,26 @@
     .field { display: flex; flex-direction: column; gap: 6px; }
     label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
     input[type=text], input[type=email], input[type=date], input[type=time], input[type=number], select {
-      font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--bg);
+      font-family: Arial, sans-serif; font-size: 14px; color: var(--text); background: var(--bg);
       border: 1px solid var(--border); border-radius: 3px; padding: 9px 12px; width: 100%;
       outline: none; transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
     }
-    input:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(181,147,58,0.12); }
+    input:focus, select:focus { border-color: #ffffff; box-shadow: 0 0 0 3px rgba(181,147,58,0.12); }
     select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237a7260' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; cursor: pointer; }
     .checkbox-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.25rem; }
     .checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); cursor: pointer; padding: 10px 12px; border: 1px solid var(--border); border-radius: 3px; background: var(--bg); transition: border-color 0.2s, background 0.2s; }
-    .checkbox-item:has(input:checked) { border-color: var(--gold); background: var(--gold-pale); }
-    .checkbox-item input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0; }
+    .checkbox-item:has(input:checked) { border-color: #ffffff; background: var(--gold-pale); }
+    .checkbox-item input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: #ffffff; flex-shrink: 0; }
     .extras-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
     .itens-extras { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
     .item-extra-row { display: flex; gap: 8px; align-items: center; }
     .item-extra-row input { flex: 1; }
     .btn-remove { background: none; border: 1px solid var(--border); border-radius: 3px; width: 34px; height: 34px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, color 0.2s; }
     .btn-remove:hover { border-color: #c0392b; color: #c0392b; }
-    .btn-add { background: none; border: 1px dashed var(--border); border-radius: 3px; padding: 8px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: border-color 0.2s, color 0.2s; }
-    .btn-add:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-add { background: none; border: 1px dashed var(--border); border-radius: 3px; padding: 8px 14px; font-family: Arial, sans-serif; font-size: 13px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: border-color 0.2s, color 0.2s; }
+    .btn-add:hover { border-color: #ffffff; color: #ffffff; }
     .form-footer { margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-    .btn-gerar { background: var(--dark); color: var(--gold-light); border: 1px solid var(--gold); border-radius: 3px; padding: 13px 36px; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; letter-spacing: 0.08em; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s, color 0.2s; }
+    .btn-gerar { background: var(--dark); color: #ffffff; border: 1px solid var(--gold); border-radius: 3px; padding: 13px 36px; font-family: Arial, sans-serif; font-size: 18px; font-weight: 500; letter-spacing: 0.08em; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s, color 0.2s; }
     .btn-gerar:hover { background: var(--gold); color: var(--dark); }
     .success-msg { display: none; align-items: center; gap: 8px; font-size: 13px; color: var(--success); background: #edf7f1; border: 1px solid #b6ddc8; border-radius: 3px; padding: 8px 16px; }
     .success-msg.visible { display: flex; }
@@ -76,7 +76,7 @@
   <div class="section">
     <div class="section-header"><span class="section-num">I</span><h2>Dados do Solicitante</h2></div>
     <div class="section-body">
-      <div class="field-row cols-1"><div class="field"><label for="nome">Nome completo</label><input type="text" id="nome" placeholder="Nome do irmão solicitante"></div></div>
+      <div class="field-row cols-1"><div class="field"><label for="nome">Nome completo</label><input type="text" id="nome" placeholder="Nome do solicitante"></div></div>
       <div class="field-row cols-2">
         <div class="field"><label for="cpf">CPF</label><input type="text" id="cpf" placeholder="000.000.000-00"></div>
         <div class="field"><label for="grau">Grau</label><input type="text" id="grau" placeholder="Ex: Mestre"></div>
@@ -571,9 +571,9 @@ function gerarPDF() {
 
   function secTitulo(num, titulo) {
     checkPage(14);
-    doc.setFillColor(46, 43, 34);
+    doc.setFillColor(0, 0, 128);
     doc.rect(ml, y, cw, 8, 'F');
-    doc.setTextColor(212, 176, 106);
+    doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
     doc.text(num + '  ' + titulo, ml + 4, y + 5.5);
     doc.setTextColor(0, 0, 0);
@@ -591,12 +591,12 @@ function gerarPDF() {
   }
 
   // Cabeçalho
-  doc.setFillColor(26, 23, 16);
+  doc.setFillColor(0, 0, 128);
   doc.rect(0, 0, W, 32, 'F');
-  doc.setDrawColor(181, 147, 58);
+  doc.setDrawColor(180, 210, 240);
   doc.setLineWidth(0.8);
   doc.line(0, 32, W, 32);
-  doc.setTextColor(181, 147, 58);
+  doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
   doc.text('Loja Maconica Harmonia No 8', W/2, 12, { align: 'center' });
   doc.setFontSize(9); doc.setFont('helvetica', 'normal');
@@ -609,7 +609,7 @@ function gerarPDF() {
 
   // Introdução
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  const intro = 'Por meio deste instrumento, a Loja Maconica Harmonia No 8, doravante denominada simplesmente Loja, concede autorizacao de uso do seu salao ao(a) irmao(a) identificado(a) abaixo, nas condicoes aqui descritas.';
+  const intro = 'Por meio deste instrumento, a Loja Maconica Harmonia No 8, doravante denominada simplesmente Loja, concede autorizacao de uso do seu salao ao(a) Solicitante identificado(a) abaixo, nas condicoes aqui descritas.';
   const introLines = doc.splitTextToSize(intro, cw);
   doc.text(introLines, ml, y);
   y += introLines.length * 6 + 8;
@@ -671,10 +671,22 @@ function gerarPDF() {
   linha(true, 'Data do pagamento: ', dataPagto);
   y += 4;
 
-  // Seção 5
-  secTitulo('V', 'Consideracoes Finais');
+
+  // Seção 5 — Conservação e Reposição
+  secTitulo('V', 'Conservacao e Reposicao em Caso de Dano');
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  const finalTxt = 'Este documento e celebrado com base na confianca e no espirito fraterno que une os membros desta Loja. Ambas as partes estao de acordo com os termos acima descritos e firmam o presente instrumento.';
+  const conservTxt1 = 'O(A) solicitante compromete-se a zelar pela boa conservacao do salao e de todos os equipamentos e utensilios disponibilizados durante o periodo de uso.';
+  const conservLines1 = doc.splitTextToSize(conservTxt1, cw);
+  doc.text(conservLines1, ml, y); y += conservLines1.length * 6 + 4;
+  const conservTxt2 = 'Em caso de dano, extravio ou quebra de qualquer item pertencente a Loja, o(a) solicitante devera comunicar imediatamente a administracao e arcar com os custos de reparo ou reposicao do bem, pelo valor de mercado vigente na data do ocorrido.';
+  const conservLines2 = doc.splitTextToSize(conservTxt2, cw);
+  doc.text(conservLines2, ml, y); y += conservLines2.length * 6 + 4;
+y += 4;
+
+  // Seção 6
+  secTitulo('VI', 'Consideracoes Finais');
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+  const finalTxt = 'Este documento e celebrado com base na confianca e no espirito fraterno que une os membros desta Loja. Ambas as partes estao de acordo com os termos acima descritos e assinam o presente instrumento.';
   const finalLines = doc.splitTextToSize(finalTxt, cw);
   doc.text(finalLines, ml, y); y += finalLines.length * 6 + 16;
 
@@ -685,7 +697,7 @@ function gerarPDF() {
   doc.line(W - mr - 70, y, W - mr, y);
   y += 5;
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(90,90,90);
-  doc.text('Solicitante (Irmao)', ml, y);
+  doc.text('Solicitante ', ml, y);
   doc.text('Representante da Loja', W - mr - 70, y);
   y += 12;
   doc.setTextColor(0,0,0); doc.setFontSize(10);
