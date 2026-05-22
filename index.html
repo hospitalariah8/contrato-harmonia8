@@ -582,13 +582,45 @@ function processarCSV(texto) {
   const mapa = {};
   headers.forEach((h, i) => { mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim(); });
 
+  // Converte data de qualquer formato para AAAA-MM-DD
+  function converterData(val) {
+    if (!val) return '';
+    // já está no formato correto
+    if (/^d{4}-d{2}-d{2}$/.test(val)) return val;
+    // DD/MM/AAAA ou DD/MM/AA
+    const m1 = val.match(/^(d{1,2})[/-](d{1,2})[/-](d{2,4})$/);
+    if (m1) {
+      const ano = m1[3].length === 2 ? '20' + m1[3] : m1[3];
+      return ano + '-' + m1[2].padStart(2,'0') + '-' + m1[1].padStart(2,'0');
+    }
+    // MM/DD/AAAA (formato americano)
+    const m2 = val.match(/^(d{1,2})[/-](d{1,2})[/-](d{4})$/);
+    if (m2) return m2[3] + '-' + m2[1].padStart(2,'0') + '-' + m2[2].padStart(2,'0');
+    return '';
+  }
+
+  // Normaliza texto para comparação (remove acentos, minúsculas)
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
+
   // Mapeamento flexível de colunas do Google Forms para os campos do painel
-  const set = (id, chaves) => {
+  const set = (id, chaves, tipo) => {
     const el = document.getElementById(id);
     if (!el) return;
     for (const chave of chaves) {
       for (const k of Object.keys(mapa)) {
-        if (k.includes(chave)) { el.value = mapa[k]; return; }
+        if (norm(k).includes(norm(chave))) {
+          let val = mapa[k];
+          if (tipo === 'data') val = converterData(val);
+          if (tipo === 'select') {
+            // tenta encontrar a opção mais próxima
+            const opts = Array.from(el.options);
+            const match = opts.find(o => norm(o.value).includes(norm(val)) || norm(val).includes(norm(o.value)));
+            if (match) el.value = match.value;
+            return;
+          }
+          el.value = val;
+          return;
+        }
       }
     }
   };
@@ -598,14 +630,14 @@ function processarCSV(texto) {
   set('grau',           ['grau', 'degree']);
   set('telefone',       ['telefone', 'tel', 'phone', 'celular', 'whatsapp']);
   set('email',          ['email', 'e-mail']);
-  set('endereco',       ['endereço', 'endereco', 'address']);
-  set('data',           ['data do evento', 'data evento', 'date']);
+  set('endereco',       ['endereco', 'address']);
+  set('data',           ['data do evento', 'data evento', 'date'], 'data');
   set('finalidade',     ['finalidade', 'objetivo', 'motivo', 'evento']);
-  set('horario_inicio', ['início', 'inicio', 'start', 'hora de início']);
-  set('horario_fim',    ['término', 'termino', 'fim', 'end', 'hora de término']);
-  set('pessoas',        ['pessoas', 'convidados', 'participantes', 'número de pessoas']);
-  set('pagamento',      ['pagamento', 'payment', 'forma de pagamento']);
-  set('data_pagamento', ['data do pagamento', 'data pagamento']);
+  set('horario_inicio', ['inicio', 'start', 'hora de inicio']);
+  set('horario_fim',    ['termino', 'fim', 'end', 'hora de termino']);
+  set('pessoas',        ['pessoas', 'convidados', 'participantes', 'numero de pessoas']);
+  set('pagamento',      ['pagamento', 'payment', 'forma de pagamento'], 'select');
+  set('data_pagamento', ['data do pagamento', 'data pagamento'], 'data');
 
   // Feedback visual
   const msg = document.getElementById('import-msg');
