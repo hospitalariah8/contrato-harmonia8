@@ -619,9 +619,7 @@ function processarCSV(texto) {
   headers.forEach(function(h, i) {
     mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim();
   });
-  Object.keys(mapa).forEach(function(k) {
-    console.log('CAMPO [' + Array.from(k).map(function(c){ return c.charCodeAt(0); }).join(',') + '] "' + k + '" = "' + mapa[k] + '"')
-  });
+
 
   // Log para diagnóstico
   Object.keys(mapa).forEach(function(k) {
@@ -649,15 +647,15 @@ function processarCSV(texto) {
 
   setVal('nome',           'nome completo');
   setVal('cpf',            'cpf');
-  setVal('grau',           'grau (apenas para irm\u00e3os)');
+  setVal('grau',           'grau (apenas para irmã£os)');
   setVal('telefone',       'telefone (91) 9xxxx-xxxx');
   setVal('email',          'e-mail');
-  setVal('endereco',       'endere\u00e7o');
+  setVal('endereco',       'endereã§o');
   setVal('data',           'data do evento',          'data');
   setVal('finalidade',     'finalidade');
-  setVal('horario_inicio', 'hor\u00e1rio de in\u00edcio');
-  setVal('horario_fim',    'hor\u00e1rio de t\u00e9rmino');
-  setVal('pessoas',        'n\u00ba estimado de pessoas');
+  setVal('horario_inicio', 'horã¡rio de inã­cio');
+  setVal('horario_fim',    'horã¡rio de tã©rmino');
+  setVal('pessoas',        'nâº estimado de pessoas');
   setVal('pagamento',      'forma de pagamento',      'select');
 
   const msg = document.getElementById('import-msg');
