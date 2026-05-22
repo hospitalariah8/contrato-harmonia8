@@ -641,22 +641,33 @@ function processarCSV(texto) {
     }
   };
 
-  // Log dos cabeçalhos encontrados para depuração
-  console.log('Cabeçalhos CSV:', Object.keys(mapa));
+  // Mapeamento direto com cabeçalhos exatos do Google Forms
+  const setExato = (id, chave, tipo) => {
+    const el = document.getElementById(id);
+    if (!el || !mapa[chave]) return;
+    let val = mapa[chave];
+    if (tipo === 'data') val = converterData(val);
+    if (tipo === 'select') {
+      const opts = Array.from(el.options);
+      const match = opts.find(o => norm(o.value) === norm(val) || norm(val).includes(norm(o.value)));
+      if (match) el.value = match.value;
+      return;
+    }
+    el.value = val;
+  };
 
-  set('nome',           ['nome completo', 'nome', 'name', 'solicitante']);
-  set('cpf',            ['cpf']);
-  set('grau',           ['grau']);
-  set('telefone',       ['telefone', 'tel', 'phone', 'celular', 'whatsapp']);
-  set('email',          ['e-mail', 'email']);
-  set('endereco',       ['endereco', 'endere', 'address']);
-  set('data',           ['data do evento', 'data evento', 'date'], 'data');
-  set('finalidade',     ['finalidade', 'objetivo', 'motivo']);
-  set('horario_inicio', ['horario de inicio', 'inicio', 'hora de inicio', 'start']);
-  set('horario_fim',    ['horario de termino', 'termino', 'hora de termino', 'fim', 'end']);
-  set('pessoas',        ['pessoas', 'convidados', 'participantes', 'estimado']);
-  set('pagamento',      ['forma de pagamento', 'pagamento', 'payment'], 'select');
-  set('data_pagamento', ['data do pagamento', 'data pagamento'], 'data');
+  setExato('nome',           'nome completo');
+  setExato('cpf',            'cpf');
+  setExato('grau',           'grau (apenas para irmãos)');
+  setExato('telefone',       'telefone (91) 9xxxx-xxxx');
+  setExato('email',          'e-mail');
+  setExato('endereco',       'endereço');
+  setExato('data',           'data do evento', 'data');
+  setExato('finalidade',     'finalidade');
+  setExato('horario_inicio', 'horário de início');
+  setExato('horario_fim',    'horário de término');
+  setExato('pessoas',        'nº estimado de pessoas');
+  setExato('pagamento',      'forma de pagamento', 'select');
 
   // Feedback visual
   const msg = document.getElementById('import-msg');
