@@ -563,7 +563,16 @@ function importarCSV() {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = ev => processarCSV(ev.target.result);
+    reader.onload = ev => {
+      let texto = ev.target.result;
+      if (texto.includes('Ã') || texto.includes('â€')) {
+        const reader2 = new FileReader();
+        reader2.onload = ev2 => processarCSV(ev2.target.result);
+        reader2.readAsText(file, 'ISO-8859-1');
+      } else {
+        processarCSV(texto);
+      }
+    };
     reader.readAsText(file, 'UTF-8');
   };
   input.click();
@@ -574,13 +583,13 @@ function processarCSV(texto) {
   if (linhas.length < 2) { alert('Arquivo CSV inválido ou sem respostas.'); return; }
 
   // Cabeçalhos na primeira linha
-  const headers = linhas[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+  const headers = linhas[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase().replace(/\s+/g,' '));
   // Última resposta (última linha)
   const ultima = linhas[linhas.length - 1];
   const valores = parseCSVLine(ultima);
 
   const mapa = {};
-  headers.forEach((h, i) => { mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim(); });
+  headers.forEach((h, i) => { mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim().replace(/\s+/g,' '); });
 
   // Converte data de qualquer formato para AAAA-MM-DD
   function converterData(val) {
@@ -625,18 +634,21 @@ function processarCSV(texto) {
     }
   };
 
-  set('nome',           ['nome', 'name', 'solicitante']);
+  // Log dos cabeçalhos encontrados para depuração
+  console.log('Cabeçalhos CSV:', Object.keys(mapa));
+
+  set('nome',           ['nome completo', 'nome', 'name', 'solicitante']);
   set('cpf',            ['cpf']);
-  set('grau',           ['grau', 'degree']);
+  set('grau',           ['grau']);
   set('telefone',       ['telefone', 'tel', 'phone', 'celular', 'whatsapp']);
-  set('email',          ['email', 'e-mail']);
-  set('endereco',       ['endereco', 'address']);
+  set('email',          ['e-mail', 'email']);
+  set('endereco',       ['endereco', 'endere', 'address']);
   set('data',           ['data do evento', 'data evento', 'date'], 'data');
-  set('finalidade',     ['finalidade', 'objetivo', 'motivo', 'evento']);
-  set('horario_inicio', ['inicio', 'start', 'hora de inicio']);
-  set('horario_fim',    ['termino', 'fim', 'end', 'hora de termino']);
-  set('pessoas',        ['pessoas', 'convidados', 'participantes', 'numero de pessoas']);
-  set('pagamento',      ['pagamento', 'payment', 'forma de pagamento'], 'select');
+  set('finalidade',     ['finalidade', 'objetivo', 'motivo']);
+  set('horario_inicio', ['horario de inicio', 'inicio', 'hora de inicio', 'start']);
+  set('horario_fim',    ['horario de termino', 'termino', 'hora de termino', 'fim', 'end']);
+  set('pessoas',        ['pessoas', 'convidados', 'participantes', 'estimado']);
+  set('pagamento',      ['forma de pagamento', 'pagamento', 'payment'], 'select');
   set('data_pagamento', ['data do pagamento', 'data pagamento'], 'data');
 
   // Feedback visual
