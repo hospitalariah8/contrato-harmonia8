@@ -93,6 +93,7 @@
     </div>
   </div>
 
+  <div id="csv-diag" style="display:none; background:#fffbe6; border:1px solid #f0c040; border-radius:4px; padding:1rem 1.25rem; margin-bottom:1rem; font-size:12px; line-height:1.8; word-break:break-all;"></div>
   <div class="divider"><span class="divider-icon">◆</span></div>
 
   <div class="section">
@@ -582,14 +583,20 @@ function processarCSV(texto) {
   const linhas = texto.trim().split('\n');
   if (linhas.length < 2) { alert('Arquivo CSV inválido ou sem respostas.'); return; }
 
-  // Cabeçalhos na primeira linha
   const headers = linhas[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase().replace(/\s+/g,' '));
-  // Última resposta (última linha)
   const ultima = linhas[linhas.length - 1];
   const valores = parseCSVLine(ultima);
 
   const mapa = {};
   headers.forEach((h, i) => { mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim().replace(/\s+/g,' '); });
+
+  // DIAGNÓSTICO — mostra o que foi lido
+  const diag = document.getElementById('csv-diag');
+  if (diag) {
+    diag.style.display = 'block';
+    diag.innerHTML = '<strong>Cabeçalhos lidos do CSV:</strong><br>' +
+      Object.keys(mapa).map((k,i) => '<code>' + i + ': [' + k + '] = ' + mapa[k] + '</code>').join('<br>');
+  }
 
   // Converte data de qualquer formato para AAAA-MM-DD
   function converterData(val) {
