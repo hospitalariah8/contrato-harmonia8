@@ -598,11 +598,11 @@ function gerarPDF() {
   doc.line(0, 32, W, 32);
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
-  doc.text('Loja Maconica Harmonia No 8', W/2, 12, { align: 'center' });
+  doc.text('Loja Maçônica Harmonia Nº 8', W/2, 12, { align: 'center' });
   doc.setFontSize(9); doc.setFont('helvetica', 'normal');
-  doc.text('Av. Pedro Miranda, 1130 - Pedreira, Belem - PA, 66085-022', W/2, 19, { align: 'center' });
+  doc.text('Av. Pedro Miranda, 1130 - Pedreira, Belém - PA, 66085-022', W/2, 19, { align: 'center' });
   doc.setFontSize(12); doc.setFont('helvetica', 'bold');
-  doc.text('Autorizacao de Uso do Salao', W/2, 27, { align: 'center' });
+  doc.text('Autorização de Uso do Salão', W/2, 27, { align: 'center' });
   doc.setTextColor(0, 0, 0);
 
   y = 42;
@@ -619,26 +619,26 @@ function gerarPDF() {
   wrapText('Nome completo: ', nome, cw);
   linha(true, 'CPF: ', cpf + '      Grau: ' + grau);
   linha(true, 'Telefone: ', telefone + '      E-mail: ' + email);
-  wrapText('Endereco: ', endereco, cw);
+  wrapText('Endereço: ', endereco, cw);
   y += 4;
 
   // Seção 2
-  secTitulo('II', 'Dados da Locacao');
+  secTitulo('II', 'Dados da Locação');
   linha(true, 'Data do evento: ', data);
-  linha(true, 'Horario de inicio: ', hi + '      Horario de termino: ' + hf);
+  linha(true, 'Horário de início: ', hi + '      Horario de termino: ' + hf);
   wrapText('Finalidade do evento: ', finalidade, cw);
-  linha(true, 'Numero estimado de pessoas: ', String(pessoas));
+  linha(true, 'Número estimado de pessoas: ', String(pessoas));
   y += 4;
 
   // Seção 3
-  secTitulo('III', 'Equipamentos e Estrutura Disponiveis');
+  secTitulo('III', 'Equipamentos e Estrutura Disponíveis');
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  doc.text('O salao sera disponibilizado com os seguintes itens:', ml, y); y += 7;
+  doc.text('O salão será disponibilizado com os seguintes itens:', ml, y); y += 7;
 
   const equip = [];
   if (eqMesas)   equip.push('Mesas e cadeiras (conforme disponibilidade da Loja);');
-  if (eqCozinha) equip.push('Cozinha completa, incluindo fogao, pia e utensilios em geral (panelas, talheres, loucas, etc.);');
-  equip.push('Demais itens de infraestrutura basica do salao.');
+  if (eqCozinha) equip.push('Cozinha completa, incluindo fogão, pia e utensílios em geral (panelas, talheres, louças, etc.);');
+  equip.push('Demais itens de infraestrutura básica do salão.');
 
   equip.forEach((item, i) => {
     checkPage(7);
@@ -664,7 +664,7 @@ function gerarPDF() {
   // Seção 4
   secTitulo('IV', 'Valor e Forma de Pagamento');
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  const valorTxt = 'O valor acordado para a utilizacao do salao e de R$ 1.000,00 (mil reais) por diaria, a ser pago conforme combinado com a administracao da Loja.';
+  const valorTxt = 'O valor acordado para a utilização do salão é de R$ 1.000,00 (mil reais) por diária, a ser pago conforme combinado com a administração da Loja.';
   const valorLines = doc.splitTextToSize(valorTxt, cw);
   doc.text(valorLines, ml, y); y += valorLines.length * 6 + 4;
   linha(true, 'Forma de pagamento: ', pagamento);
@@ -673,20 +673,23 @@ function gerarPDF() {
 
 
   // Seção 5 — Conservação e Reposição
-  secTitulo('V', 'Conservacao e Reposicao em Caso de Dano');
+  secTitulo('V', 'Conservação e Reposição em Caso de Dano');
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  const conservTxt1 = 'O(A) solicitante compromete-se a zelar pela boa conservacao do salao e de todos os equipamentos e utensilios disponibilizados durante o periodo de uso.';
+  const conservTxt1 = 'O(A) solicitante compromete-se a zelar pela boa conservação do salão e de todos os equipamentos e utensílios disponibilizados durante o período de uso.';
   const conservLines1 = doc.splitTextToSize(conservTxt1, cw);
   doc.text(conservLines1, ml, y); y += conservLines1.length * 6 + 4;
-  const conservTxt2 = 'Em caso de dano, extravio ou quebra de qualquer item pertencente a Loja, o(a) solicitante devera comunicar imediatamente a administracao e arcar com os custos de reparo ou reposicao do bem, pelo valor de mercado vigente na data do ocorrido.';
+  const conservTxt2 = 'Em caso de dano, extravio ou quebra de qualquer item pertencente à Loja, o(a) solicitante deverá comunicar imediatamente a administração e arcar com os custos de reparo ou reposição do bem, pelo valor de mercado vigente na data do ocorrido.';
   const conservLines2 = doc.splitTextToSize(conservTxt2, cw);
   doc.text(conservLines2, ml, y); y += conservLines2.length * 6 + 4;
-y += 4;
+  const chavesTxt = 'O(A) solicitante ficará responsável pela coleta e devolução das chaves do salão junto ao Venerável Mestre da Loja, nos horários previamente acordados.';
+  const chavesLines = doc.splitTextToSize(chavesTxt, cw);
+  doc.text(chavesLines, ml, y); y += chavesLines.length * 6 + 8;
+  y += 4;
 
   // Seção 6
-  secTitulo('VI', 'Consideracoes Finais');
+  secTitulo('VI', 'Considerações Finais');
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-  const finalTxt = 'Este documento e celebrado com base na confianca e no espirito fraterno que une os membros desta Loja. Ambas as partes estao de acordo com os termos acima descritos e assinam o presente instrumento.';
+  const finalTxt = 'Este documento é celebrado com base na confiança e no espírito fraterno que une os membros desta Loja. Ambas as partes estão de acordo com os termos acima descritos e assinam o presente instrumento.';
   const finalLines = doc.splitTextToSize(finalTxt, cw);
   doc.text(finalLines, ml, y); y += finalLines.length * 6 + 16;
 
