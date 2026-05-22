@@ -550,129 +550,33 @@ function adicionarItem() {
 
 function fData(d) {
   if (!d) return '_____/_____/__________';
-  const [y,m,dd] = d.split('-'); return dd+'/'+m+'/'+y;
+  const parts = d.split('-');
+  return parts[2] + '/' + parts[1] + '/' + parts[0];
 }
 function fHora(h) { return h || '_____'; }
 function gv(id) { const el = document.getElementById(id); return el ? el.value.trim() || null : null; }
 
-// Importar CSV do Google Sheets
 function importarCSV() {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = '.csv';
-  input.onchange = e => {
+  input.onchange = function(e) {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      let texto = ev.target.result;
-      if (texto.includes('Ã') || texto.includes('â€')) {
-        const reader2 = new FileReader();
-        reader2.onload = ev2 => processarCSV(ev2.target.result);
-        reader2.readAsText(file, 'ISO-8859-1');
+    const r1 = new FileReader();
+    r1.onload = function(ev) {
+      const texto = ev.target.result;
+      if (texto.indexOf('\u00c3') >= 0 || texto.indexOf('\u00e3') >= 0) {
+        const r2 = new FileReader();
+        r2.onload = function(ev2) { processarCSV(ev2.target.result); };
+        r2.readAsText(file, 'ISO-8859-1');
       } else {
         processarCSV(texto);
       }
     };
-    reader.readAsText(file, 'UTF-8');
+    r1.readAsText(file, 'UTF-8');
   };
   input.click();
-}
-
-function processarCSV(texto) {
-  const linhas = texto.trim().split('\n');
-  if (linhas.length < 2) { alert('Arquivo CSV inválido ou sem respostas.'); return; }
-
-  const headers = linhas[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase().replace(/\s+/g,' '));
-  const ultima = linhas[linhas.length - 1];
-  const valores = parseCSVLine(ultima);
-
-  const mapa = {};
-  headers.forEach((h, i) => { mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim().replace(/\s+/g,' '); });
-
-  // DIAGNÓSTICO — mostra o que foi lido
-  const diag = document.getElementById('csv-diag');
-  if (diag) {
-    diag.style.display = 'block';
-    diag.innerHTML = '<strong>Cabeçalhos lidos do CSV:</strong><br>' +
-      Object.keys(mapa).map((k,i) => '<code>' + i + ': [' + k + '] = ' + mapa[k] + '</code>').join('<br>');
-  }
-
-  // Converte data de qualquer formato para AAAA-MM-DD
-  function converterData(val) {
-    if (!val) return '';
-    // já está no formato correto
-    if (/^d{4}-d{2}-d{2}$/.test(val)) return val;
-    // DD/MM/AAAA ou DD/MM/AA
-    const m1 = val.match(/^(d{1,2})[/-](d{1,2})[/-](d{2,4})$/);
-    if (m1) {
-      const ano = m1[3].length === 2 ? '20' + m1[3] : m1[3];
-      return ano + '-' + m1[2].padStart(2,'0') + '-' + m1[1].padStart(2,'0');
-    }
-    // MM/DD/AAAA (formato americano)
-    const m2 = val.match(/^(d{1,2})[/-](d{1,2})[/-](d{4})$/);
-    if (m2) return m2[3] + '-' + m2[1].padStart(2,'0') + '-' + m2[2].padStart(2,'0');
-    return '';
-  }
-
-  // Normaliza texto para comparação (remove acentos, minúsculas)
-  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
-
-  // Mapeamento flexível de colunas do Google Forms para os campos do painel
-  const set = (id, chaves, tipo) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    for (const chave of chaves) {
-      for (const k of Object.keys(mapa)) {
-        if (norm(k).includes(norm(chave))) {
-          let val = mapa[k];
-          if (tipo === 'data') val = converterData(val);
-          if (tipo === 'select') {
-            // tenta encontrar a opção mais próxima
-            const opts = Array.from(el.options);
-            const match = opts.find(o => norm(o.value).includes(norm(val)) || norm(val).includes(norm(o.value)));
-            if (match) el.value = match.value;
-            return;
-          }
-          el.value = val;
-          return;
-        }
-      }
-    }
-  };
-
-  // Mapeamento direto com cabeçalhos exatos do Google Forms
-  const setExato = (id, chave, tipo) => {
-    const el = document.getElementById(id);
-    if (!el || !mapa[chave]) return;
-    let val = mapa[chave];
-    if (tipo === 'data') val = converterData(val);
-    if (tipo === 'select') {
-      const opts = Array.from(el.options);
-      const match = opts.find(o => norm(o.value) === norm(val) || norm(val).includes(norm(o.value)));
-      if (match) el.value = match.value;
-      return;
-    }
-    el.value = val;
-  };
-
-  setExato('nome',           'nome completo');
-  setExato('cpf',            'cpf');
-  setExato('grau',           'grau (apenas para irmãos)');
-  setExato('telefone',       'telefone (91) 9xxxx-xxxx');
-  setExato('email',          'e-mail');
-  setExato('endereco',       'endereço');
-  setExato('data',           'data do evento', 'data');
-  setExato('finalidade',     'finalidade');
-  setExato('horario_inicio', 'horário de início');
-  setExato('horario_fim',    'horário de término');
-  setExato('pessoas',        'nº estimado de pessoas');
-  setExato('pagamento',      'forma de pagamento', 'select');
-
-  // Feedback visual
-  const msg = document.getElementById('import-msg');
-  msg.classList.add('visible');
-  setTimeout(() => msg.classList.remove('visible'), 4000);
 }
 
 function parseCSVLine(linha) {
@@ -687,6 +591,70 @@ function parseCSVLine(linha) {
   }
   resultado.push(atual);
   return resultado;
+}
+
+function converterData(val) {
+  if (!val) return '';
+  val = val.trim();
+  // AAAA-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+  // DD/MM/AAAA
+  const m = val.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  if (m) {
+    const ano = m[3].length === 2 ? '20' + m[3] : m[3];
+    return ano + '-' + m[2].padStart(2,'0') + '-' + m[1].padStart(2,'0');
+  }
+  return '';
+}
+
+function processarCSV(texto) {
+  const linhas = texto.trim().split('\n');
+  if (linhas.length < 2) { alert('CSV inválido ou sem respostas.'); return; }
+
+  const headers = linhas[0].split(',').map(function(h) {
+    return h.replace(/^"|"$/g, '').trim().toLowerCase().replace(/\s+/g, ' ');
+  });
+  const ultima = linhas[linhas.length - 1];
+  const valores = parseCSVLine(ultima);
+  const mapa = {};
+  headers.forEach(function(h, i) {
+    mapa[h] = (valores[i] || '').replace(/^"|"$/g, '').trim();
+  });
+
+  function setVal(id, chave, tipo) {
+    const el = document.getElementById(id);
+    if (!el || mapa[chave] === undefined) return;
+    let val = mapa[chave];
+    if (!val) return;
+    if (tipo === 'data') {
+      val = converterData(val);
+    } else if (tipo === 'select') {
+      const vNorm = val.toLowerCase();
+      const opts = Array.from(el.options);
+      const match = opts.find(function(o) {
+        return o.value.toLowerCase() === vNorm || vNorm.indexOf(o.value.toLowerCase()) >= 0;
+      });
+      if (match) el.value = match.value;
+      return;
+    }
+    el.value = val;
+  }
+
+  setVal('nome',           'nome completo');
+  setVal('cpf',            'cpf');
+  setVal('grau',           'grau (apenas para irm\u00e3os)');
+  setVal('telefone',       'telefone (91) 9xxxx-xxxx');
+  setVal('email',          'e-mail');
+  setVal('endereco',       'endere\u00e7o');
+  setVal('data',           'data do evento',          'data');
+  setVal('finalidade',     'finalidade');
+  setVal('horario_inicio', 'hor\u00e1rio de in\u00edcio');
+  setVal('horario_fim',    'hor\u00e1rio de t\u00e9rmino');
+  setVal('pessoas',        'n\u00ba estimado de pessoas');
+  setVal('pagamento',      'forma de pagamento',      'select');
+
+  const msg = document.getElementById('import-msg');
+  if (msg) { msg.classList.add('visible'); setTimeout(function(){ msg.classList.remove('visible'); }, 4000); }
 }
 
 async function gerarPDF() {
@@ -706,7 +674,7 @@ async function gerarPDF() {
   const dataPagto = fData(gv('data_pagamento'));
   const eqMesas   = document.getElementById('eq_mesas').checked;
   const eqCozinha = document.getElementById('eq_cozinha').checked;
-  const extras    = Array.from(document.querySelectorAll('#itens-extras-container .item-extra-row input')).map(i=>i.value.trim()).filter(Boolean);
+  const extras    = Array.from(document.querySelectorAll('#itens-extras-container .item-extra-row input')).map(function(i){ return i.value.trim(); }).filter(Boolean);
 
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const W = 210, ml = 20, mr = 20, cw = W - ml - mr;
@@ -720,7 +688,7 @@ async function gerarPDF() {
     doc.text(label, ml, y);
     const lw = doc.getTextWidth(label);
     doc.setFont('helvetica', 'normal');
-    doc.text(value, ml + lw + 1, y);
+    doc.text(String(value), ml + lw + 1, y);
     y += 7;
   }
 
@@ -737,7 +705,7 @@ async function gerarPDF() {
     doc.text(label, ml, y);
     const lw = doc.getTextWidth(label);
     doc.setFont('helvetica', 'normal');
-    const lines = doc.splitTextToSize(value, cw - lw - 1);
+    const lines = doc.splitTextToSize(String(value), cw - lw - 1);
     doc.text(lines, ml + lw + 1, y);
     y += lines.length * 6 + 2;
   }
@@ -761,49 +729,49 @@ async function gerarPDF() {
   doc.line(0, 32, W, 32);
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
-  doc.text('Loja Maçônica Harmonia Nº 8', W/2, 12, { align: 'center' });
+  doc.text('Loja Ma\u00e7\u00f4nica Harm\u00f4nia N\u00ba 8', W/2, 12, { align: 'center' });
   doc.setFontSize(9); doc.setFont('helvetica', 'normal');
-  doc.text('Av. Pedro Miranda, 1130 - Pedreira, Belém - PA, 66085-022', W/2, 19, { align: 'center' });
+  doc.text('Av. Pedro Miranda, 1130 - Pedreira, Bel\u00e9m - PA, 66085-022', W/2, 19, { align: 'center' });
   doc.setFontSize(12); doc.setFont('helvetica', 'bold');
-  doc.text('Autorização de Uso do Salão', W/2, 27, { align: 'center' });
+  doc.text('Autoriza\u00e7\u00e3o de Uso do Sal\u00e3o', W/2, 27, { align: 'center' });
   doc.setTextColor(0, 0, 0);
   y = 42;
 
-  bloco('Por meio deste instrumento, a Loja Maçônica Harmonia Nº 8, doravante denominada simplesmente Loja, concede autorização de uso do seu salão ao(à) solicitante identificado(a) abaixo, nas condições aqui descritas.');
+  bloco('Por meio deste instrumento, a Loja Ma\u00e7\u00f4nica Harm\u00f4nia N\u00ba 8, doravante denominada simplesmente Loja, concede autoriza\u00e7\u00e3o de uso do seu sal\u00e3o ao(\u00e0) solicitante identificado(a) abaixo, nas condi\u00e7\u00f5es aqui descritas.');
   y += 4;
 
   secTitulo('I', 'Dados do Solicitante');
   wrapLinha('Nome completo: ', nome);
   linha('CPF: ', cpf + '      Grau: ' + grau);
   linha('Telefone: ', telefone + '      E-mail: ' + email);
-  wrapLinha('Endereço: ', endereco);
+  wrapLinha('Endere\u00e7o: ', endereco);
   y += 4;
 
-  secTitulo('II', 'Dados da Locação');
+  secTitulo('II', 'Dados da Loca\u00e7\u00e3o');
   linha('Data do evento: ', data);
-  linha('Horário de início: ', hi + '      Horário de término: ' + hf);
+  linha('Hor\u00e1rio de in\u00edcio: ', hi + '      Hor\u00e1rio de t\u00e9rmino: ' + hf);
   wrapLinha('Finalidade do evento: ', finalidade);
-  linha('Número estimado de pessoas: ', String(pessoas));
+  linha('N\u00famero estimado de pessoas: ', String(pessoas));
   y += 4;
 
-  secTitulo('III', 'Equipamentos e Estrutura Disponíveis');
-  bloco('O salão será disponibilizado com os seguintes itens:');
+  secTitulo('III', 'Equipamentos e Estrutura Dispon\u00edveis');
+  bloco('O sal\u00e3o ser\u00e1 disponibilizado com os seguintes itens:');
   const equip = [];
   if (eqMesas)   equip.push('Mesas e cadeiras (conforme disponibilidade da Loja);');
-  if (eqCozinha) equip.push('Cozinha completa, incluindo fogão, pia e utensílios em geral (panelas, talheres, louças, etc.);');
-  equip.push('Demais itens de infraestrutura básica do salão.');
-  equip.forEach((eq, i) => {
+  if (eqCozinha) equip.push('Cozinha completa, incluindo fog\u00e3o, pia e utenss\u00edlios em geral (panelas, talheres, lou\u00e7as, etc.);');
+  equip.push('Demais itens de infraestrutura b\u00e1sica do sal\u00e3o.');
+  equip.forEach(function(eq, i) {
     checkPage(7);
     const lines = doc.splitTextToSize((i+1) + '. ' + eq, cw - 5);
     doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
     doc.text(lines, ml + 4, y); y += lines.length * 6 + 2;
   });
   if (extras.length > 0) {
-    y += 2;
+    y += 2; checkPage(8);
     doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
-    checkPage(8); doc.text('Itens adicionais solicitados:', ml, y); y += 7;
+    doc.text('Itens adicionais solicitados:', ml, y); y += 7;
     doc.setFont('helvetica', 'normal');
-    extras.forEach(item => {
+    extras.forEach(function(item) {
       checkPage(7);
       const lines = doc.splitTextToSize('( ) ' + item, cw - 5);
       doc.text(lines, ml + 4, y); y += lines.length * 6 + 2;
@@ -812,19 +780,19 @@ async function gerarPDF() {
   y += 4;
 
   secTitulo('IV', 'Valor e Forma de Pagamento');
-  bloco('O valor acordado para a utilização do salão é de R$ 1.000,00 (mil reais) por diária, a ser pago conforme combinado com a administração da Loja.');
+  bloco('O valor acordado para a utiliza\u00e7\u00e3o do sal\u00e3o \u00e9 de R$ 1.000,00 (mil reais) por di\u00e1ria, a ser pago conforme combinado com a administra\u00e7\u00e3o da Loja.');
   linha('Forma de pagamento: ', pagamento);
   linha('Data do pagamento: ', dataPagto);
   y += 4;
 
-  secTitulo('V', 'Conservação e Reposição em Caso de Dano');
-  bloco('O(A) solicitante compromete-se a zelar pela boa conservação do salão e de todos os equipamentos e utensílios disponibilizados durante o período de uso.');
-  bloco('Em caso de dano, extravio ou quebra de qualquer item pertencente à Loja, o(a) solicitante deverá comunicar imediatamente a administração e arcar com os custos de reparo ou reposição do bem, pelo valor de mercado vigente na data do ocorrido.');
-  bloco('O(A) solicitante ficará responsável pela coleta e devolução das chaves do salão junto ao Venerável Mestre da Loja, nos horários previamente acordados.');
+  secTitulo('V', 'Conserva\u00e7\u00e3o e Reposi\u00e7\u00e3o em Caso de Dano');
+  bloco('O(A) solicitante compromete-se a zelar pela boa conserva\u00e7\u00e3o do sal\u00e3o e de todos os equipamentos e utenss\u00edlios disponibilizados durante o per\u00edodo de uso.');
+  bloco('Em caso de dano, extravio ou quebra de qualquer item pertencente \u00e0 Loja, o(a) solicitante dever\u00e1 comunicar imediatamente a administra\u00e7\u00e3o e arcar com os custos de reparo ou reposi\u00e7\u00e3o do bem, pelo valor de mercado vigente na data do ocorrido.');
+  bloco('O(A) solicitante ficar\u00e1 respons\u00e1vel pela coleta e devolu\u00e7\u00e3o das chaves do sal\u00e3o junto ao Vener\u00e1vel Mestre da Loja, nos hor\u00e1rios previamente acordados.');
   y += 4;
 
-  secTitulo('VI', 'Considerações Finais');
-  bloco('Este documento é celebrado com base na confiança e no espírito fraterno que une os membros desta Loja. Ambas as partes estão de acordo com os termos acima descritos e assinam o presente instrumento.');
+  secTitulo('VI', 'Considera\u00e7\u00f5es Finais');
+  bloco('Este documento \u00e9 celebrado com base na confian\u00e7a e no esp\u00edrito fraterno que une os membros desta Loja. Ambas as partes est\u00e3o de acordo com os termos acima descritos e assinam o presente instrumento.');
   y += 16;
 
   checkPage(30);
@@ -846,9 +814,10 @@ async function gerarPDF() {
 
   const msg = document.getElementById('success-msg');
   msg.classList.add('visible');
-  setTimeout(() => msg.classList.remove('visible'), 4000);
+  setTimeout(function(){ msg.classList.remove('visible'); }, 4000);
 }
 
 </script>
+
 </body>
 </html>
